@@ -1,0 +1,9 @@
+id = im; type = InfrastructureManager; token = command(oidc-token egi)
+
+id = gsi; type = OpenStack; host = https://egiosc.gsi.de:5000/v3; username = egi.eu; tenant = openid; password = command(oidc-token egi); auth_version = 3.x_oidc_access_token; domain = VO:vo.access.egi.eu
+
+id = cesga; type = OpenStack; host = https://fedcloud-osservices.egi.cesga.es:5000/v3; username = egi.eu; tenant = openid; password = command(oidc-token egi); auth_version = 3.x_oidc_access_token; domain = vo.access.egi.eu
+
+id = iisas; type = OpenStack; host = https://cloud.ui.savba.sk:5000/v3/; username = egi.eu; tenant = openid; password = command(oidc-token egi); auth_version = 3.x_oidc_access_token; domain = vo.access.egi.eu
+
+#id = in2p3; type = EGI; host = IN2P3-IRES; vo = vo.lethe-project.eu; token = command(oidc-token egi)
