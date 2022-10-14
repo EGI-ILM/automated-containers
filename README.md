@@ -122,9 +122,9 @@ auth_file=auth.dat
 id = im; type = InfrastructureManager; token = command(oidc-token egi)
 id = iisas; type = OpenStack; host = https://cloud.ui.savba.sk:5000/v3/; username = egi.eu; tenant = openid; password = command(oidc-token egi); auth_version = 3.x_oidc_access_token; domain = vo.access.egi.eu
 ```
-When using EGI infrastructure, the example line can be reused, but there are two attributes that must be modified according to the EGI provider that will be used:
-- host, which is is the Openstack endpoint of the provider.
-- domain, which is the name of the Opestack project for the VO. Note that this is normally the same as the VO (*e.g.* vo.access.egi.eu) but it might differ in some providers (*e.g.* VO:vo.access.egi.eu), so it is good to double check.
+The example line can be reused for any EGI infrastructure provider, but there are two attributes that must be modified according to the specific provider used:
+- **host**, which is is the Openstack endpoint of the provider.
+- **domain**, which is the name of the Opestack project for the VO. Note that this is normally the same as the VO (*e.g.* vo.access.egi.eu) but it might differ in some providers (*e.g.* VO:vo.access.egi.eu), so it is good to double check.
 
 A convenient way to retrieve the information about the host and domain you want to use is with the [fedcloudclient](https://fedcloudclient.fedcloud.eu/) tool. If you need to install this tool, specific steps are given in [this section](https://github.com/EGI-ILM/fedcloud-terraform#3-install-fedcloudclient).
 
