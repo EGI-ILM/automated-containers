@@ -1,6 +1,6 @@
-# Support to automate the execution of containers on demand
+# Support for automated on-demand execution of containers
 
-This document intends to explain a possible method to automate the execution of containers on demand in the EGI infrastructure. The idea is to use the [Infrastructure Manager](https://www.grycap.upv.es/im/index.php) (IM) to create virtual infrastructure and instruct it to run a container. Thanks to IM's [CLI](https://github.com/grycap/im-client) support, this can be automated in scripts.
+This document intends to explain a possible method to automate the execution of containers on demand, in the EGI infrastructure. The idea is to use the [Infrastructure Manager](https://www.grycap.upv.es/im/index.php) (IM) to create virtual infrastructure and instruct it to run a container. Thanks to IM's [CLI](https://github.com/grycap/im-client) support, this execution can be easily automated in scripts.
 
 The main steps are:
 1. Installation and configuration of the authentication. This is done with the [oidc-agent](https://github.com/indigo-dc/oidc-agent).
@@ -8,7 +8,9 @@ The main steps are:
 3. Definition of a [TOSCA template](https://docs.oasis-open.org/tosca/TOSCA/v1.0/os/TOSCA-v1.0-os.html) to define the actions to perform.
 4. Execution of the im-client with the TOSCA template.
 
-Specific steps are given below. You can skip some of the steps if, for example, you already have oidc-agent installed and configured in your system.
+**Steps 1 and 2** require to be done only once (unless there is a change of provider and new details have to be added). In **Step 3**, different templates will have to be created or modified for different container images. **Step 4** is the actual step that has to be run routinarily.
+
+Specific instructions for each step are given below. You can skip some of the steps if, for example, you already have oidc-agent installed and configured in your system.
 
 Note that these steps are prepared for an **Ubuntu system**. Other systems will require different but similar steps. **Python3** and **pip** must be available.
 
@@ -16,7 +18,7 @@ Note that these steps are prepared for an **Ubuntu system**. Other systems will 
 
 ## 1. OIDC-AGENT
 
-[oidc-agent](https://github.com/indigo-dc/oidc-agent) is a tool that allows you to use tokens from Check-in in, amongst others, in other applications. It is very convenient as it refresh tokens automatically when they expire.
+[oidc-agent](https://github.com/indigo-dc/oidc-agent) is a tool that allows you to use tokens from Check-in in, amongst others, in other applications. It is very convenient as it requests access tokens automatically when they expire.
 
 ### 1.1 Installation
 
@@ -26,6 +28,8 @@ sudo sh -c "echo 'deb [signed-by=/usr/share/keyrings/kitrepo-archive.gpg] https:
 sudo apt update
 sudo apt install oidc-agent
 ```
+
+*Note: Maybe in your system it is not necessary to add the keys. Herein, it is recommended to run only the last two commands and, if the installation fails for this reason, then run the four commands.*
 
 ### 1.2 Configuration
 
@@ -49,7 +53,7 @@ export OIDC_AGENT_ACCOUNT=egi
 
 (again, "**egi**" is the name of the oidc-agent account, and a different name may have been used).
 
-These instructions can be permanently added *e.g.* to the `~/.profile` or `~/.bashrc` file, so that they are always executed automatically.
+These instructions can be permanently added *e.g.* to the `~/.profile` or `~/.bashrc` file, so that they are executed automatically on system startup.
 
 ### 1.4 Additional oidc-agent commands
 - `oidc-gen -l`: Lists all available accounts
@@ -65,7 +69,7 @@ OR: ``printf '%(%F %T)T\n' `oidc-token --env $OIDC_AGENT_ACCOUNT | grep -oP '(?<
 
 [im-client](https://github.com/grycap/im-client) is a tool to use the Infrastructure Manager from the command line.
 
-There are two main ways to use im-client: directly via **Python** or via a **Docker container**. Both are equally valid but, since the currently Docker images do not have oidc-agent preinstalled, this section will describe the use of the Python version.
+There are two main ways to use im-client: directly via **Python** or via a **Docker container**. Both are equally valid but, since the current Docker image does not have oidc-agent preinstalled, this section will describe the use of the Python version.
 
 ### 2.1 Installation
 
@@ -87,8 +91,10 @@ pip install IM-client
 If virtual environments are used, note that the environment has to be activated via:
 
 ```console
-source .../cli/bin/activate
+source <PATH>/cli/bin/activate
 ```
+
+Otherwise, the command _**im-client**_ will not be found outside the environment.
 
 ### 2.2 Configuration
 To configure im-client, two files are needed:
@@ -96,7 +102,7 @@ To configure im-client, two files are needed:
 - im_client.cfg. ([example file](example_files/im_client.cfg))
 - auth.dat. ([example file](example_files/auth.dat))
 
-*im_client.cfg* is fairly simple, and the one in the example can be used without modification. The file must be placed either as `im_client.cfg` in the current directory where im-client is executed OR as `~\.im_client.cfg` (in the home directory of the user).
+*im_client.cfg* is fairly simple, and the one in the example can be used as it is, without any modification. The file must be placed either as `im_client.cfg` in the current directory where im-client is executed OR as `~\.im_client.cfg` (in the home directory of the user).
 
 ```
 [im_client]
@@ -110,9 +116,9 @@ auth_file=auth.dat
 id = im; type = InfrastructureManager; token = command(oidc-token egi)
 id = iisas; type = OpenStack; host = https://cloud.ui.savba.sk:5000/v3/; username = egi.eu; tenant = openid; password = command(oidc-token egi); auth_version = 3.x_oidc_access_token; domain = vo.access.egi.eu
 ```
-When using EGI infrastructure, the example line can be used, but there are two attributes that must be modified according to the EGI provider that will be used:
+When using EGI infrastructure, the example line can be reused, but there are two attributes that must be modified according to the EGI provider that will be used:
 - host, which is is the Openstack endpoint of the provider.
-- domain, which is the name of the Opestack project for the VO. Note that this is normally the same as the VO (*e.g.* vo.access.egi.eu) but it might differ in some providers (*e.g.* VO:vo.access.egi.eu) so it is good to double check.
+- domain, which is the name of the Opestack project for the VO. Note that this is normally the same as the VO (*e.g.* vo.access.egi.eu) but it might differ in some providers (*e.g.* VO:vo.access.egi.eu), so it is good to double check.
 
 A convenient way to retrieve the information about the host and domain you want to use is with the [fedcloudclient](https://fedcloudclient.fedcloud.eu/) tool. If you need to install this tool, specific steps are given in [this section](https://github.com/EGI-ILM/fedcloud-terraform#3-install-fedcloudclient).
 
@@ -126,9 +132,9 @@ And the **domain** can be obtained via: `fedcloud endpoint projects -a` under th
 
 One way to instruct IM what to do is with a [TOSCA template](https://docs.oasis-open.org/tosca/TOSCA/v1.0/os/TOSCA-v1.0-os.html). TOSCA (*Topology and Orchestration Specification for Cloud Applications*) is an OASIS standard.
 
-An example TOSCA template that can be used as a reference is provided as [an example](example_files/tosca_docker.yml). This template creates a VM, installs Docker inside and runs a container. In the example, the VM requested has 2 vCPU and 2 GB RAM (if allowed by the provider) and runs the container `ghcr.io/ivoa/oligia-webtop:ubuntu-2022.01.13` (see: [Oligia repository](https://github.com/ivoa/ivoa-desktop)).
+An example TOSCA template that can be used as a reference is provided as [an example](example_files/tosca_docker.yml). This template creates a VM, installs Docker inside and runs a container. In the example, the VM requested has 2 vCPU and 2 GB RAM (or the closest specs allowed by the provider) and runs the container `ghcr.io/ivoa/oligia-webtop:ubuntu-2022.01.13` (see: [Oligia repository](https://github.com/ivoa/ivoa-desktop)).
 
-The main changes that have to be made to this template are described in the following subsections.
+The main changes that can be made to this example template are described in the following subsections.
 
 ### 3.1 Number of CPUs:
 ```yaml
@@ -160,7 +166,7 @@ inputs:
       default: appdb://IISAS-FedCloud/egi.ubuntu.18.04?vo.access.egi.eu
 ```
 
-This is *important* as it is what tells IM which provider will be used. Of course, your `auth.dat` should have the details for this provider, and the user must have permissions on it (`oidc-agent` takes care of the access token). The string:
+This is *important* as this is what tells IM which provider will be used. Of course, your `auth.dat` should have the details for this provider, and the user must have permissions on it (`oidc-agent` takes care of the access token). The string:
 
 ```appdb://IISAS-FedCloud/egi.ubuntu.18.04?vo.access.egi.eu```
 
@@ -220,6 +226,8 @@ This will create a VM and run the `oligia-webtop` Docker container inside. It wi
 ```console
 im_client.py getoutputs <INFRA_ID> | grep node_ip | cut -d' ' -f 3
 ```
+
+_Note: If the VM is in the process of creation, the IP address might not be available. You might need to add a delay before trying the command or run it in a loop until the datum is available._
 
 ## 4.3 SSH into container
 ```console
