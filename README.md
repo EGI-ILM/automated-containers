@@ -14,6 +14,9 @@ Specific instructions for each step are given below. You can skip some of the st
 
 Note that these steps are prepared for an **Ubuntu system**. Other systems will require different but similar steps. **Python3** and **pip** must be available.
 
+<br />
+<br />
+
 ---
 
 ## 1. OIDC-AGENT
@@ -62,6 +65,9 @@ These instructions can be permanently added *e.g.* to the `~/.profile` or `~/.ba
 
 OR: ``printf '%(%F %T)T\n' `oidc-token --env $OIDC_AGENT_ACCOUNT | grep -oP '(?<=OIDC_EXP=).*?(?=;)'` ``
 - `oidc-gen egi --reauthenticate`: Obtain a new refresh token when it expires after (typically) 13 months.
+
+<br />
+<br />
 
 ---
 
@@ -125,6 +131,9 @@ A convenient way to retrieve the information about the host and domain you want 
 The **host** can be obtained via: `fedcloud endpoint list -a` under the `URL` column.
 
 And the **domain** can be obtained via: `fedcloud endpoint projects -a` under the `Name` column.
+
+<br />
+<br />
 
 ---
 
@@ -207,6 +216,9 @@ Not all sites support all VOs and all VM images, so this has to be found out in 
             port: 3000
             protocol: tcp
 ```
+
+<br />
+<br />
 
 ---
 
