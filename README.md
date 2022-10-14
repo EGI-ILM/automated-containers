@@ -1,4 +1,4 @@
-# Support for automated on-demand execution of containers
+# Support for automated on-demand execution of Docker containers
 
 This document intends to explain a possible method to automate the execution of containers on demand, in the EGI infrastructure. The idea is to use the [Infrastructure Manager](https://www.grycap.upv.es/im/index.php) (IM) to create virtual infrastructure and instruct it to run a container. Thanks to IM's [CLI](https://github.com/grycap/im-client) support, this execution can be easily automated in scripts.
 
@@ -21,7 +21,7 @@ Note that these steps are prepared for an **Ubuntu system**. Other systems will 
 
 ## 1. OIDC-AGENT
 
-[oidc-agent](https://github.com/indigo-dc/oidc-agent) is a tool that allows you to use tokens from Check-in in, amongst others, in other applications. It is very convenient as it requests access tokens automatically when they expire.
+[oidc-agent](https://github.com/indigo-dc/oidc-agent) is a tool that allows you to use tokens from Check-in (amongst others) in other applications. It is very convenient as it requests access tokens automatically when they expire.
 
 ### 1.1 Installation
 
