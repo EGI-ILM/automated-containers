@@ -139,7 +139,7 @@ And the **domain** can be obtained via: `fedcloud endpoint projects -a` under th
 
 ## 3. TOSCA TEMPLATES
 
-One way to instruct IM what to do is with a [TOSCA template](https://docs.oasis-open.org/tosca/TOSCA/v1.0/os/TOSCA-v1.0-os.html). TOSCA (*Topology and Orchestration Specification for Cloud Applications*) is an OASIS standard.
+One way to instruct IM what to do is with a TOSCA template. TOSCA (*Topology and Orchestration Specification for Cloud Applications*) is an [OASIS standard](https://docs.oasis-open.org/tosca/TOSCA/v1.0/os/TOSCA-v1.0-os.html).
 
 An example TOSCA template that can be used as a reference is provided as [an example](example_files/tosca_docker.yml). This template creates a VM, installs Docker inside and runs a container. In the example, the VM requested has 2 vCPU and 2 GB RAM (or the closest specs allowed by the provider) and runs the container `ghcr.io/ivoa/oligia-webtop:ubuntu-2022.01.13` (see: [Oligia repository](https://github.com/ivoa/ivoa-desktop)).
 
