@@ -210,7 +210,7 @@ Not all sites support all VOs and all VM images, so this has to be found out in 
 
 ---
 
-## 4. EXECUTION
+## 4. CONTAINER EXECUTION
 
 Once *oidc-agent* and *im-client* have been installed and a TOSCA template has been created, the setup can be considered finished, and it is time to do the routinary Docker execution.
 
