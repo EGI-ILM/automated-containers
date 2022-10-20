@@ -217,6 +217,14 @@ Not all sites support all VOs and all VM images, so this has to be found out in 
             protocol: tcp
 ```
 
+### 3.7 Possible outputs
+```yaml
+outputs:
+    ...
+    oligia_endpoint:
+      value: { concat: [ 'http://', get_attribute: [ simple_node, public_address, 0 ], ':3000' ] }
+```
+
 <br />
 <br />
 
