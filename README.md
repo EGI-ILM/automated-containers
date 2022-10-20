@@ -5,7 +5,7 @@ This document intends to explain a possible method to automate the execution of 
 The main steps are:
 1. Installation and configuration of the authentication. This is done with the [oidc-agent](https://github.com/indigo-dc/oidc-agent).
 2. Installation and configuration of [im-client](https://github.com/grycap/im-client).
-3. Definition of a [TOSCA template](https://docs.oasis-open.org/tosca/TOSCA/v1.0/os/TOSCA-v1.0-os.html) to define the actions to perform.
+3. Definition of a [TOSCA template](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/TOSCA-Simple-Profile-YAML-v1.0.html) to define the actions to perform.
 4. Execution of the im-client with the TOSCA template.
 
 **Steps 1 and 2** require to be done only once (unless there is a change of provider and new details have to be added). In **Step 3**, different templates will have to be created or modified for different container images. **Step 4** is the actual step that has to be run routinarily.
@@ -139,7 +139,7 @@ And the **domain** can be obtained via: `fedcloud endpoint projects -a` under th
 
 ## 3. TOSCA TEMPLATES
 
-One way to instruct IM what to do is with a TOSCA template. TOSCA (*Topology and Orchestration Specification for Cloud Applications*) is an [OASIS standard](https://docs.oasis-open.org/tosca/TOSCA/v1.0/os/TOSCA-v1.0-os.html).
+One way to instruct IM what to do is with a TOSCA template. TOSCA (*Topology and Orchestration Specification for Cloud Applications*) is an [OASIS standard](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/TOSCA-Simple-Profile-YAML-v1.0.html).
 
 An example TOSCA template that can be used as a reference is provided as [an example](example_files/tosca_docker.yml). This template creates a VM, installs Docker inside and runs a container. In the example, the VM requested has 2 vCPU and 2 GB RAM (or the closest specs allowed by the provider) and runs the container `ghcr.io/ivoa/oligia-webtop:ubuntu-2022.01.13` (see: [Oligia repository](https://github.com/ivoa/ivoa-desktop)).
 
